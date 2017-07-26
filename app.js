@@ -19,6 +19,7 @@ app.listen(port, () => {
 });
 
 function time (input) {
+	// If the input can be coerced to a truthy number, proceed
 	if (Number(input)) {
 		let secs = Number(input);
 		let ms = secs * 1000;
@@ -29,11 +30,19 @@ function time (input) {
 		return result;
 	}
 
-	let secs = Number(moment(input).format('X'));
+	// If it can't, check to see if the string is a valid format for momentjs
+	if (moment(input).isValid()) {
+		let secs = Number(moment(input).format('X'));
 
-	const result = {
-		'unix': secs,
-		'natural': input.charAt(0).toUpperCase() + input.slice(1)
-	};
-	return result;
+		const result = {
+			'unix': secs,
+			'natural': input.charAt(0).toUpperCase() + input.slice(1)
+		};
+		return result;
+	} else {
+		return result = {
+			'unix': null,
+			'natural': null
+		};
+	}
 }
